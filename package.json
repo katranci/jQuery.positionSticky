@@ -1,0 +1,17 @@
+{
+  "name": "jQuery.positionSticky",
+  "version": "0.0.0",
+  "description": "Sticky positioning polyfill for jQuery",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahmet Katrancı <ahmet@katranci.co.uk>",
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "~0.12.16",
+    "karma-jasmine": "~0.2.0",
+    "karma-chrome-launcher": "~0.1.4",
+    "karma-coverage": "~0.2.4"
+  }
+}
