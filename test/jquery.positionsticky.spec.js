@@ -9,6 +9,11 @@ describe("PositionSticky", function() {
 
   describe("#init", function() {
 
+    it("sets the element as the element property", function() {
+      var instance = PositionSticky.create(element);
+      expect(instance.element).toBe(element);
+    });
+
     it("sets the sticky element's parent as the container property", function() {
       var instance = PositionSticky.create(element);
       expect(instance.container).toEqual($html[0]);
@@ -91,13 +96,13 @@ describe("PositionSticky", function() {
       instance = PositionSticky.create(element);
     });
 
-    it("returns true when container.getBoundingClientRect().top is bigger than zero", function() {
-      spyOn(instance.container, 'getBoundingClientRect').and.returnValue({top: 100});
-      expect(instance.isContainerBelowViewport()).toBe(true);
-    });
+    it("returns true when container.getBoundingClientRect().top is equal or bigger than zero", function() {
+      var containerSpy = spyOn(instance.container, 'getBoundingClientRect');
 
-    it("returns true when container.getBoundingClientRect().top is equal to zero", function() {
-      spyOn(instance.container, 'getBoundingClientRect').and.returnValue({top: 0});
+      containerSpy.and.returnValue({top: 0});
+      expect(instance.isContainerBelowViewport()).toBe(true);
+
+      containerSpy.and.returnValue({top: 1});
       expect(instance.isContainerBelowViewport()).toBe(true);
     });
 
@@ -105,6 +110,30 @@ describe("PositionSticky", function() {
       spyOn(instance.container, 'getBoundingClientRect').and.returnValue({top: -1});
       expect(instance.isContainerBelowViewport()).toBe(false);
     });
+  });
+
+  describe("#canStickyFitInContainer", function() {
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("returns true when container.getBoundingClientRect().bottom is equal or bigger than sticky element's height", function() {
+      var containerSpy = spyOn(instance.container, 'getBoundingClientRect');
+      spyOn(instance.element, 'getBoundingClientRect').and.returnValue({height: 100});
+
+      containerSpy.and.returnValue({bottom: 100});
+      expect(instance.canStickyFitInContainer()).toBe(true);
+
+      containerSpy.and.returnValue({bottom: 101});
+      expect(instance.canStickyFitInContainer()).toBe(true);
+    });
+
+    it("returns false otherwise", function() {
+      spyOn(instance.element, 'getBoundingClientRect').and.returnValue({height: 99});
+      expect(instance.canStickyFitInContainer()).toBe(false);
+    })
   });
 
 });

@@ -6,6 +6,7 @@ PositionSticky = {
 
   init: function(element) {
     this.constructor = PositionSticky;
+    this.element = element;
     this.container = element.parentNode;
     return this;
   },
@@ -58,7 +59,7 @@ PositionSticky = {
   },
 
   canStickyFitInContainer: function() {
-
+    return this.container.getBoundingClientRect().bottom >= this.element.getBoundingClientRect().height;
   }
 
 };
