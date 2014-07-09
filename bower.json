@@ -1,0 +1,12 @@
+{
+  "name": "jQuery.positionSticky",
+  "version": "0.0.0",
+  "authors": [
+    "Ahmet Katrancı <ahmet@katranci.co.uk>"
+  ],
+  "description": "Sticky positioning polyfill for jQuery",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": ">=1.7 < 2"
+  }
+}
