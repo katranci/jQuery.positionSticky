@@ -25,6 +25,59 @@ describe("PositionSticky", function() {
 
   });
 
+  describe("#isFixed", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("returns true if posScheme is PositionSticky.POS_SCHEME_FIXED", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_FIXED;
+      expect(instance.isFixed()).toBe(true);
+    });
+
+    it("returns false otherwise", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_STATIC;
+      expect(instance.isFixed()).toBe(false);
+
+      instance.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
+      expect(instance.isFixed()).toBe(false);
+    });
+  });
+
+  describe("#makeFixed", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("removes bottom property in case sticky element had absolute positioning before", function() {
+      instance.element.style.setProperty('bottom', '0px');
+      instance.makeFixed();
+      expect(instance.element.style.getPropertyValue('bottom')).toBeNull();
+    });
+
+    it("sets sticky element's position to 'fixed'", function() {
+      instance.makeFixed();
+      expect(instance.element.style.getPropertyValue('position')).toEqual('fixed');
+    });
+
+    it("sets sticky element's top to 0", function() {
+      instance.makeFixed();
+      expect(instance.element.style.getPropertyValue('top')).toEqual('0px');
+    });
+
+    it("updates posScheme to PositionSticky.POS_SCHEME_FIXED", function() {
+      instance.makeFixed();
+      expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_FIXED);
+    });
+
+  });
+
   describe("#update", function() {
 
     var instance;

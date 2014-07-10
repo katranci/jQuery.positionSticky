@@ -1,5 +1,9 @@
 PositionSticky = {
 
+  POS_SCHEME_STATIC:   100,
+  POS_SCHEME_FIXED:    200,
+  POS_SCHEME_ABSOLUTE: 300,
+
   create: function(element) {
     return Object.create(PositionSticky).init(element);
   },
@@ -8,6 +12,7 @@ PositionSticky = {
     this.constructor = PositionSticky;
     this.element = element;
     this.container = element.parentNode;
+    this.posScheme = null;
     return this;
   },
 
@@ -20,11 +25,14 @@ PositionSticky = {
   },
 
   isFixed: function() {
-
+    return this.posScheme === PositionSticky.POS_SCHEME_FIXED;
   },
 
   makeFixed: function() {
-
+    this.element.style.removeProperty('bottom');
+    this.element.style.setProperty('position', 'fixed');
+    this.element.style.setProperty('top', '0px');
+    this.posScheme = PositionSticky.POS_SCHEME_FIXED;
   },
 
   isAbsolute: function() {
