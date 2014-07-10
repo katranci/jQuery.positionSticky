@@ -13,7 +13,17 @@ PositionSticky = {
     this.element = element;
     this.container = element.parentNode;
     this.posScheme = null;
+
+    this.validateContainerPosScheme();
+
     return this;
+  },
+
+  validateContainerPosScheme: function() {
+    var containerPosScheme = this.container.style.getPropertyValue('position');
+    if (containerPosScheme != 'relative' && containerPosScheme != 'absolute') {
+      this.container.style.setProperty('position', 'relative');
+    }
   },
 
   isStatic: function() {
@@ -37,11 +47,14 @@ PositionSticky = {
   },
 
   isAbsolute: function() {
-
+    return this.posScheme === PositionSticky.POS_SCHEME_ABSOLUTE;
   },
 
   makeAbsolute: function() {
-
+    this.element.style.removeProperty('top');
+    this.element.style.setProperty('position', 'absolute');
+    this.element.style.setProperty('bottom', '0px');
+    this.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
   },
 
   update: function() {

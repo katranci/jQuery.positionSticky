@@ -19,7 +19,47 @@ describe("PositionSticky", function() {
       expect(instance.container).toEqual($html[0]);
     });
 
+    it("validates container's positioning scheme", function() {
+      spyOn(PositionSticky, 'validateContainerPosScheme');
+      var instance = PositionSticky.create(element);
+      expect(instance.validateContainerPosScheme).toHaveBeenCalled();
+    });
+
     xit("attaches #update to the Window.onscroll event", function() {
+
+    });
+
+  });
+
+  describe("#validateContainerPosScheme", function() {
+
+    describe("when container's positioning scheme is not either relative or absolute", function() {
+
+      it("sets container's position to relative", function() {
+        var $container = jQuery('<div></div>').appendTo('body');
+        var container = $container[0];
+        var mock = { container: container };
+        var validateContainerPosScheme = PositionSticky.validateContainerPosScheme.bind(mock);
+
+        validateContainerPosScheme();
+
+        expect(container.style.getPropertyValue('position')).toEqual('relative');
+      });
+
+    });
+
+    describe("otherwise", function() {
+
+      it("doesn't change container's positioning scheme", function() {
+        var $container = jQuery('<div></div>').css('position', 'absolute').appendTo('body');
+        var container = $container[0];
+        var mock = { container: container };
+        var validateContainerPosScheme = PositionSticky.validateContainerPosScheme.bind(mock);
+
+        validateContainerPosScheme();
+
+        expect(container.style.getPropertyValue('position')).toEqual('absolute');
+      });
 
     });
 
@@ -116,6 +156,59 @@ describe("PositionSticky", function() {
     it("updates posScheme to PositionSticky.POS_SCHEME_FIXED", function() {
       instance.makeFixed();
       expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_FIXED);
+    });
+
+  });
+
+  describe("#isAbsolute", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("returns true if posScheme is PositionSticky.POS_SCHEME_ABSOLUTE", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
+      expect(instance.isAbsolute()).toBe(true);
+    });
+
+    it("returns false otherwise", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_STATIC;
+      expect(instance.isAbsolute()).toBe(false);
+
+      instance.posScheme = PositionSticky.POS_SCHEME_FIXED;
+      expect(instance.isAbsolute()).toBe(false);
+    });
+  });
+
+  describe("#makeFixed", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("removes top property in case sticky element had static positioning before", function() {
+      instance.element.style.setProperty('top', '0px');
+      instance.makeAbsolute();
+      expect(instance.element.style.getPropertyValue('top')).toBeNull();
+    });
+
+    it("sets sticky element's position to 'absolute'", function() {
+      instance.makeAbsolute();
+      expect(instance.element.style.getPropertyValue('position')).toEqual('absolute');
+    });
+
+    it("sets sticky element's bottom to 0", function() {
+      instance.makeAbsolute();
+      expect(instance.element.style.getPropertyValue('bottom')).toEqual('0px');
+    });
+
+    it("updates posScheme to PositionSticky.POS_SCHEME_ABSOLUTE", function() {
+      instance.makeAbsolute();
+      expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_ABSOLUTE);
     });
 
   });
