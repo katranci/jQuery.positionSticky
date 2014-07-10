@@ -17,11 +17,12 @@ PositionSticky = {
   },
 
   isStatic: function() {
-
+    return this.posScheme === PositionSticky.POS_SCHEME_STATIC;
   },
 
   makeStatic: function() {
-
+    this.element.style.setProperty('position', 'static');
+    this.posScheme = PositionSticky.POS_SCHEME_STATIC;
   },
 
   isFixed: function() {

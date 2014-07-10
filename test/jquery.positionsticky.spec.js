@@ -25,6 +25,48 @@ describe("PositionSticky", function() {
 
   });
 
+  describe("#isStatic", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("returns true if posScheme is PositionSticky.POS_SCHEME_STATIC", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_STATIC;
+      expect(instance.isStatic()).toBe(true);
+    });
+
+    it("returns false otherwise", function() {
+      instance.posScheme = PositionSticky.POS_SCHEME_FIXED;
+      expect(instance.isStatic()).toBe(false);
+
+      instance.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
+      expect(instance.isStatic()).toBe(false);
+    });
+  });
+
+  describe("#makeStatic", function() {
+
+    var instance;
+
+    beforeEach(function() {
+      instance = PositionSticky.create(element);
+    });
+
+    it("sets sticky element's position to 'static'", function() {
+      instance.makeStatic();
+      expect(instance.element.style.getPropertyValue('position')).toEqual('static');
+    });
+
+    it("updates posScheme to PositionSticky.POS_SCHEME_STATIC", function() {
+      instance.makeStatic();
+      expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_STATIC);
+    });
+
+  });
+
   describe("#isFixed", function() {
 
     var instance;
