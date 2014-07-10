@@ -15,6 +15,7 @@ PositionSticky = {
     this.posScheme = null;
 
     this.validateContainerPosScheme();
+    this.subscribeToWindowScroll();
 
     return this;
   },
@@ -24,6 +25,11 @@ PositionSticky = {
     if (containerPosScheme != 'relative' && containerPosScheme != 'absolute') {
       this.container.style.setProperty('position', 'relative');
     }
+  },
+
+  subscribeToWindowScroll: function(w) {
+    var w = w || window;
+    w.addEventListener('scroll', this.update.bind(this));
   },
 
   isStatic: function() {

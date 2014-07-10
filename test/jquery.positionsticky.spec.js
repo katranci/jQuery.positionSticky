@@ -25,6 +25,12 @@ describe("PositionSticky", function() {
       expect(instance.validateContainerPosScheme).toHaveBeenCalled();
     });
 
+    it("calls #subscribeToWindowScroll", function() {
+      spyOn(PositionSticky, 'subscribeToWindowScroll');
+      var instance = PositionSticky.create(element);
+      expect(instance.subscribeToWindowScroll).toHaveBeenCalled();
+    });
+
     xit("attaches #update to the Window.onscroll event", function() {
 
     });
@@ -63,6 +69,19 @@ describe("PositionSticky", function() {
 
     });
 
+  });
+
+  describe("#subscribeToWindowScroll", function() {
+    it("attaches #update to Window.onscroll event", function() {
+      var mock = { update: function() {} };
+      var mockWindow = { addEventListener: function(event, callback) { callback(); }};
+      var subscribeToWindowScroll = PositionSticky.subscribeToWindowScroll.bind(mock);
+      spyOn(mock, 'update');
+
+      subscribeToWindowScroll(mockWindow);
+
+      expect(mock.update).toHaveBeenCalled();
+    });
   });
 
   describe("#isStatic", function() {
