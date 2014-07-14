@@ -10,9 +10,11 @@ PositionSticky = {
 
   init: function(element) {
     this.constructor = PositionSticky;
+    this.window = window;
     this.element = element;
     this.container = element.parentNode;
     this.posScheme = null;
+    this.isTicking = false;
 
     this.validateContainerPosScheme();
     this.subscribeToWindowScroll();
@@ -27,9 +29,15 @@ PositionSticky = {
     }
   },
 
-  subscribeToWindowScroll: function(w) {
-    var w = w || window;
-    w.addEventListener('scroll', this.update.bind(this));
+  subscribeToWindowScroll: function() {
+    this.window.addEventListener('scroll', this.onScroll.bind(this));
+  },
+
+  onScroll: function() {
+    if (!this.isTicking) {
+      this.window.requestAnimationFrame(this.update.bind(this));
+      this.isTicking = true;
+    }
   },
 
   isStatic: function() {
@@ -64,6 +72,8 @@ PositionSticky = {
   },
 
   update: function() {
+    this.isTicking = false;
+
     if (this.isContainerBelowViewport()) {
       if (!this.isStatic()) {
         this.makeStatic();

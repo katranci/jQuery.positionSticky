@@ -72,15 +72,40 @@ describe("PositionSticky", function() {
   });
 
   describe("#subscribeToWindowScroll", function() {
-    it("attaches #update to Window.onscroll event", function() {
-      var mock = { update: function() {} };
+    it("attaches #onScroll to Window.onscroll event", function() {
       var mockWindow = { addEventListener: function(event, callback) { callback(); }};
+      var mock = { window: mockWindow, onScroll: function() {} };
       var subscribeToWindowScroll = PositionSticky.subscribeToWindowScroll.bind(mock);
+      spyOn(mock, 'onScroll');
+
+      subscribeToWindowScroll();
+
+      expect(mock.onScroll).toHaveBeenCalled();
+    });
+  });
+
+  describe("#onScroll", function() {
+
+    var mockWindow, mock, onScroll;
+
+    beforeEach(function() {
+      mockWindow = { requestAnimationFrame: function(callback) { callback(); }};
+      mock = { window: mockWindow, isTicking: false, update: function() {} };
+      onScroll = PositionSticky.onScroll.bind(mock);
       spyOn(mock, 'update');
+    });
 
-      subscribeToWindowScroll(mockWindow);
-
+    it("runs #update on every animation frame", function() {
+      onScroll();
       expect(mock.update).toHaveBeenCalled();
+    });
+
+    it("doesn't run #update more than once in the same animation frame", function() {
+      onScroll();
+      onScroll();
+      onScroll();
+
+      expect(mock.update.calls.count()).toBe(1);
     });
   });
 
