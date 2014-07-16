@@ -25,14 +25,22 @@ describe("PositionSticky", function() {
       expect(instance.validateContainerPosScheme).toHaveBeenCalled();
     });
 
+    it("calls #setOffsetTop", function() {
+      spyOn(PositionSticky, 'setOffsetTop');
+      var instance = PositionSticky.create(element);
+      expect(instance.setOffsetTop).toHaveBeenCalled();
+    });
+
+    it("calls #calcThreshold", function() {
+      spyOn(PositionSticky, 'calcThreshold');
+      var instance = PositionSticky.create(element);
+      expect(instance.calcThreshold).toHaveBeenCalled();
+    });
+
     it("calls #subscribeToWindowScroll", function() {
       spyOn(PositionSticky, 'subscribeToWindowScroll');
       var instance = PositionSticky.create(element);
       expect(instance.subscribeToWindowScroll).toHaveBeenCalled();
-    });
-
-    xit("attaches #update to the Window.onscroll event", function() {
-
     });
 
   });
@@ -67,6 +75,41 @@ describe("PositionSticky", function() {
         expect(container.style.getPropertyValue('position')).toEqual('absolute');
       });
 
+    });
+
+  });
+
+  describe("#setOffsetTop", function() {
+
+    describe("when element's computed 'top' css property value is not auto", function() {
+      it("assigns that to 'offsetTop'", function() {
+        element.style.setProperty('top', '15px');
+        var instance = PositionSticky.create(element);
+        expect(instance.offsetTop).toEqual(15);
+        element.style.removeProperty('top');
+      })
+    });
+
+    describe("otherwise", function() {
+      it("sets 'offsetTop' as 0", function() {
+        var instance = PositionSticky.create(element);
+        expect(instance.offsetTop).toEqual(0);
+      });
+    });
+
+  });
+
+
+  describe("#calcThreshold", function() {
+
+    it("returns sum of #getElementDistanceFromDocumentTop and 'offsetTop'", function() {
+      var instance = PositionSticky.create(element);
+
+      spyOn(instance, 'getElementDistanceFromDocumentTop').and.returnValue(100);
+      instance.offsetTop = 10;
+      instance.calcThreshold();
+
+      expect(instance.threshold).toEqual(110);
     });
 
   });
@@ -265,10 +308,10 @@ describe("PositionSticky", function() {
       instance = PositionSticky.create(element);
     });
 
-    describe("when container is below the viewport", function() {
+    describe("when element is below the threshold", function() {
 
       beforeEach(function() {
-        spyOn(instance, 'isContainerBelowViewport').and.returnValue(true);
+        spyOn(instance, 'isBelowThreshold').and.returnValue(true);
       });
 
       it("sets the position to static if it is not already", function() {
@@ -285,7 +328,7 @@ describe("PositionSticky", function() {
     describe("when container is above the viewport and sticky can fit inside the visible portion of the container", function() {
 
       beforeEach(function() {
-        spyOn(instance, 'isContainerBelowViewport').and.returnValue(false);
+        spyOn(instance, 'isBelowThreshold').and.returnValue(false);
         spyOn(instance, 'canStickyFitInContainer').and.returnValue(true);
       });
 
@@ -303,7 +346,7 @@ describe("PositionSticky", function() {
     describe("otherwise", function() {
 
       beforeEach(function() {
-        spyOn(instance, 'isContainerBelowViewport').and.returnValue(false);
+        spyOn(instance, 'isBelowThreshold').and.returnValue(false);
         spyOn(instance, 'canStickyFitInContainer').and.returnValue(false);
       });
 
@@ -320,27 +363,27 @@ describe("PositionSticky", function() {
 
   });
 
-  describe("#isContainerBelowViewport", function() {
+  describe("#isBelowThreshold", function() {
 
-    var instance;
+    var isBelowThreshold, mockWindow;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      mockWindow = { scrollY: 0 };
+      var mock = { window: mockWindow, threshold: 100 };
+      isBelowThreshold = PositionSticky.isBelowThreshold.bind(mock);
     });
 
-    it("returns true when container.getBoundingClientRect().top is equal or bigger than zero", function() {
-      var containerSpy = spyOn(instance.container, 'getBoundingClientRect');
-
-      containerSpy.and.returnValue({top: 0});
-      expect(instance.isContainerBelowViewport()).toBe(true);
-
-      containerSpy.and.returnValue({top: 1});
-      expect(instance.isContainerBelowViewport()).toBe(true);
+    it("returns true when window.scrollY is smaller than the threshold", function() {
+      mockWindow.scrollY = 99;
+      expect(isBelowThreshold()).toBe(true);
     });
 
     it("returns false otherwise", function() {
-      spyOn(instance.container, 'getBoundingClientRect').and.returnValue({top: -1});
-      expect(instance.isContainerBelowViewport()).toBe(false);
+      mockWindow.scrollY = 100;
+      expect(isBelowThreshold()).toBe(false);
+
+      mockWindow.scrollY = 101;
+      expect(isBelowThreshold()).toBe(false);
     });
   });
 
@@ -366,6 +409,41 @@ describe("PositionSticky", function() {
       spyOn(instance.element, 'getBoundingClientRect').and.returnValue({height: 99});
       expect(instance.canStickyFitInContainer()).toBe(false);
     })
+  });
+
+  describe("#getElementDistanceFromDocumentTop", function() {
+
+    describe("if the page is not scrolled", function() {
+      it("returns element.getBoundingClientRect().top", function() {
+        spyOn(element, 'getBoundingClientRect').and.returnValue({top: 1000});
+
+        var mockWindow = { scrollY: 0 };
+        var mock = { element: element, window: mockWindow };
+
+        getElementDistanceFromDocumentTop = PositionSticky.getElementDistanceFromDocumentTop.bind(mock);
+
+        expect(getElementDistanceFromDocumentTop()).toEqual(1000);
+      });
+    });
+
+    describe("if the page is scrolled", function() {
+      it("returns total offsetTop", function() {
+        var instance = PositionSticky.create(element);
+
+        instance.container.ownerDocument.body.style.setProperty('margin-top', '100px');
+        instance.container.ownerDocument.body.style.setProperty('padding-top', '100px');
+        instance.container.style.setProperty('margin-top', '100px');
+        instance.container.style.setProperty('padding-top', '100px');
+        instance.element.style.setProperty('margin-top', '100px');
+
+        expect(instance.getElementDistanceFromDocumentTop()).toEqual(500);
+
+        instance.container.style.removeProperty('margin-top');
+        instance.container.style.removeProperty('padding-top');
+        instance.element.style.removeProperty('margin-top');
+      });
+    });
+
   });
 
 });

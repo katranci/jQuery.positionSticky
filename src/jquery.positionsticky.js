@@ -15,8 +15,11 @@ PositionSticky = {
     this.container = element.parentNode;
     this.posScheme = null;
     this.isTicking = false;
+    this.threshold = null;
 
     this.validateContainerPosScheme();
+    this.setOffsetTop();
+    this.calcThreshold();
     this.subscribeToWindowScroll();
 
     return this;
@@ -27,6 +30,18 @@ PositionSticky = {
     if (containerPosScheme != 'relative' && containerPosScheme != 'absolute') {
       this.container.style.setProperty('position', 'relative');
     }
+  },
+
+  setOffsetTop: function() {
+    var top = this.window.getComputedStyle(this.element).getPropertyValue('top');
+    if (top === 'auto') {
+      top = 0;
+    }
+    this.offsetTop = parseInt(top, 10);
+  },
+
+  calcThreshold: function() {
+    this.threshold = this.getElementDistanceFromDocumentTop() + this.offsetTop;
   },
 
   subscribeToWindowScroll: function() {
@@ -74,7 +89,7 @@ PositionSticky = {
   update: function() {
     this.isTicking = false;
 
-    if (this.isContainerBelowViewport()) {
+    if (this.isBelowThreshold()) {
       if (!this.isStatic()) {
         this.makeStatic();
       }
@@ -89,8 +104,8 @@ PositionSticky = {
     }
   },
 
-  isContainerBelowViewport: function() {
-    if (this.container.getBoundingClientRect().top >= 0) {
+  isBelowThreshold: function() {
+    if (this.window.scrollY < this.threshold) {
       return true;
     }
     return false;
@@ -98,6 +113,20 @@ PositionSticky = {
 
   canStickyFitInContainer: function() {
     return this.container.getBoundingClientRect().bottom >= this.element.getBoundingClientRect().height;
+  },
+
+  getElementDistanceFromDocumentTop: function() {
+    if (this.window.scrollY === 0) {
+      return this.element.getBoundingClientRect().top;
+    }
+
+    var totalOffsetTop = 0;
+    var element = this.element;
+    do {
+      totalOffsetTop = totalOffsetTop + element.offsetTop;
+    } while (element = element.offsetParent);
+
+    return totalOffsetTop;
   }
 
 };
