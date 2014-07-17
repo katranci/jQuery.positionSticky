@@ -1,57 +1,52 @@
 describe("PositionSticky", function() {
 
-  var $html, element;
-
-  beforeEach(function() {
-    $html = jQuery('<div class="container"><div class="sticky"></div></div>').appendTo('body');
-    element = $html.children('.sticky')[0];
-  });
-
   describe("#init", function() {
 
     it("sets the element as the element property", function() {
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
+      var element = document.getElementById('element');
       expect(instance.element).toBe(element);
     });
 
     it("sets the sticky element's parent as the container property", function() {
-      var instance = PositionSticky.create(element);
-      expect(instance.container).toEqual($html[0]);
+      var instance = PositionStickyFactory.create();
+      var container = document.getElementById('container');
+      expect(instance.container).toBe(container);
     });
 
     it("validates container's positioning scheme", function() {
       spyOn(PositionSticky, 'validateContainerPosScheme');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.validateContainerPosScheme).toHaveBeenCalled();
     });
 
     it("calls #setOffsetTop", function() {
       spyOn(PositionSticky, 'setOffsetTop');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.setOffsetTop).toHaveBeenCalled();
     });
 
     it("calls #setOffsetBottom", function() {
       spyOn(PositionSticky, 'setOffsetBottom');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.setOffsetBottom).toHaveBeenCalled();
     });
 
     it("calls #calcThreshold", function() {
       spyOn(PositionSticky, 'calcThreshold');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.calcThreshold).toHaveBeenCalled();
     });
 
     it("calls #createPlaceholder", function() {
       spyOn(PositionSticky, 'createPlaceholder');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.createPlaceholder).toHaveBeenCalled();
     });
 
     it("calls #subscribeToWindowScroll", function() {
       spyOn(PositionSticky, 'subscribeToWindowScroll');
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
       expect(instance.subscribeToWindowScroll).toHaveBeenCalled();
     });
 
@@ -62,8 +57,7 @@ describe("PositionSticky", function() {
     describe("when container's positioning scheme is not either relative or absolute", function() {
 
       it("sets container's position to relative", function() {
-        var $container = jQuery('<div></div>').appendTo('body');
-        var container = $container[0];
+        var container = document.getElementById('container');
         var mock = { container: container };
         var validateContainerPosScheme = PositionSticky.validateContainerPosScheme.bind(mock);
 
@@ -77,8 +71,8 @@ describe("PositionSticky", function() {
     describe("otherwise", function() {
 
       it("doesn't change container's positioning scheme", function() {
-        var $container = jQuery('<div></div>').css('position', 'absolute').appendTo('body');
-        var container = $container[0];
+        var container = document.getElementById('container');
+        container.style.setProperty('position', 'absolute');
         var mock = { container: container };
         var validateContainerPosScheme = PositionSticky.validateContainerPosScheme.bind(mock);
 
@@ -97,10 +91,10 @@ describe("PositionSticky", function() {
       it("assigns that to 'offsetTop'", function() {
         var instance;
 
-        instance = PositionSticky.create(element, {offsetTop: 0});
+        instance = PositionStickyFactory.create(null, {offsetTop: 0});
         expect(instance.offsetTop).toEqual(0);
 
-        instance = PositionSticky.create(element, {offsetTop: 1});
+        instance = PositionStickyFactory.create(null, {offsetTop: 1});
         expect(instance.offsetTop).toEqual(1);
       });
     });
@@ -108,7 +102,7 @@ describe("PositionSticky", function() {
     describe("otherwise", function() {
       it("calculates container's padding-top and border-top-width and sets that as 'offsetTop'", function() {
         var setOffsetTopSpy = spyOn(PositionSticky, 'setOffsetTop');
-        var instance = PositionSticky.create(element);
+        var instance = PositionStickyFactory.create();
 
         instance.container.style.setProperty('padding', '20px');
         instance.container.style.setProperty('border', '10px solid black');
@@ -127,7 +121,7 @@ describe("PositionSticky", function() {
 
   describe("#setOffsetBottom", function() {
     it("sets container's padding-bottom and border-bottom-width as 'offsetBottom'", function() {
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
 
       instance.container.style.setProperty('padding', '20px');
       instance.container.style.setProperty('border', '10px solid black');
@@ -143,7 +137,7 @@ describe("PositionSticky", function() {
   describe("#calcThreshold", function() {
 
     it("returns #getElementDistanceFromDocumentTop - 'offsetTop'", function() {
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
 
       spyOn(instance, 'getElementDistanceFromDocumentTop').and.returnValue(100);
       instance.offsetTop = 10;
@@ -162,7 +156,7 @@ describe("PositionSticky", function() {
       // Prevent createPlaceholder to run on object initialization
       spy = spyOn(PositionSticky, 'createPlaceholder');
 
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
       instance.container.style.setProperty('width', '100px');
       instance.element.style.setProperty('height', '200px');
     });
@@ -235,7 +229,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("returns true if posScheme is PositionSticky.POS_SCHEME_STATIC", function() {
@@ -257,7 +251,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("sets sticky element's position to 'static'", function() {
@@ -283,7 +277,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("returns true if posScheme is PositionSticky.POS_SCHEME_FIXED", function() {
@@ -305,7 +299,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("removes bottom property in case sticky element had absolute positioning before", function() {
@@ -343,7 +337,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("returns true if posScheme is PositionSticky.POS_SCHEME_ABSOLUTE", function() {
@@ -365,7 +359,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     it("removes top property in case sticky element had static positioning before", function() {
@@ -403,7 +397,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
     });
 
     describe("when element is below the threshold", function() {
@@ -466,7 +460,7 @@ describe("PositionSticky", function() {
     var instance;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
       instance.threshold = 100;
     });
 
@@ -488,7 +482,7 @@ describe("PositionSticky", function() {
     var instance, getAvailableSpaceInContainerSpy;
 
     beforeEach(function() {
-      instance = PositionSticky.create(element);
+      instance = PositionStickyFactory.create();
       instance.element.style.setProperty('height', '100px');
       getAvailableSpaceInContainerSpy = spyOn(instance, 'getAvailableSpaceInContainer');
     });
@@ -513,7 +507,7 @@ describe("PositionSticky", function() {
 
   describe("#getAvailableSpaceInContainer", function() {
     it("calculates and returns available visible portion of the container's height", function() {
-      var instance = PositionSticky.create(element);
+      var instance = PositionStickyFactory.create();
 
       instance.offsetTop = 15;
       instance.offsetBottom = 15;
@@ -527,16 +521,16 @@ describe("PositionSticky", function() {
 
     describe("if the page is not scrolled", function() {
       it("returns element.getBoundingClientRect().top", function() {
-        var instance = PositionSticky.create(element);
+        var instance = PositionStickyFactory.create();
         instance.latestKnownScrollY = 0;
-        spyOn(element, 'getBoundingClientRect').and.returnValue({top: 1000});
+        spyOn(instance.element, 'getBoundingClientRect').and.returnValue({top: 1000});
         expect(instance.getElementDistanceFromDocumentTop()).toEqual(1000);
       });
     });
 
     describe("if the page is scrolled", function() {
       it("returns total offsetTop", function() {
-        var instance = PositionSticky.create(element);
+        var instance = PositionStickyFactory.create();
 
         instance.container.ownerDocument.body.style.setProperty('margin-top', '100px');
         instance.container.ownerDocument.body.style.setProperty('padding-top', '100px');
