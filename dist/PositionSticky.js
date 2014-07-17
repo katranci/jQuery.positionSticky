@@ -59,6 +59,7 @@ var PositionSticky = {
     this.setOffsetTop();
     this.setOffsetBottom();
     this.calcThreshold();
+    this.setElementWidth();
     this.createPlaceholder();
     this.subscribeToWindowScroll();
 
@@ -92,6 +93,11 @@ var PositionSticky = {
     this.threshold = this.getElementDistanceFromDocumentTop() - this.offsetTop;
   },
 
+  setElementWidth: function() {
+    var width = this.window.getComputedStyle(this.element).getPropertyValue('width');
+    this.element.style.setProperty('width', width);
+  },
+
   createPlaceholder: function() {
     var placeholder = document.createElement('DIV');
     var width = this.element.getBoundingClientRect().width + 'px';
@@ -100,7 +106,6 @@ var PositionSticky = {
     placeholder.style.setProperty('display', 'none');
     placeholder.style.setProperty('width', width);
     placeholder.style.setProperty('height', height);
-    this.element.style.setProperty('width', width);
 
     this.container.insertBefore(placeholder, this.element);
     this.placeholder = placeholder;
