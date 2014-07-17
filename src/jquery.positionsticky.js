@@ -19,6 +19,7 @@ PositionSticky = {
 
     this.validateContainerPosScheme();
     this.setOffsetTop();
+    this.setOffsetBottom();
     this.calcThreshold();
     this.createPlaceholder();
     this.subscribeToWindowScroll();
@@ -39,6 +40,12 @@ PositionSticky = {
       top = 0;
     }
     this.offsetTop = parseInt(top, 10);
+  },
+
+  setOffsetBottom: function() {
+    var bottomBorderWidth = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('border-bottom-width'), 10);
+    var bottomPadding = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('padding-bottom'), 10);
+    this.offsetBottom = bottomBorderWidth + bottomPadding;
   },
 
   calcThreshold: function() {
@@ -99,7 +106,7 @@ PositionSticky = {
   makeAbsolute: function() {
     this.element.style.removeProperty('top');
     this.element.style.setProperty('position', 'absolute');
-    this.element.style.setProperty('bottom', '0px');
+    this.element.style.setProperty('bottom', this.offsetBottom + 'px');
     this.placeholder.style.setProperty('display', 'block');
     this.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
   },
@@ -130,7 +137,11 @@ PositionSticky = {
   },
 
   canStickyFitInContainer: function() {
-    return this.container.getBoundingClientRect().bottom >= this.element.getBoundingClientRect().height;
+    return this.getAvailableSpaceInContainer() >= this.element.getBoundingClientRect().height;
+  },
+
+  getAvailableSpaceInContainer: function() {
+    return this.container.getBoundingClientRect().bottom - this.offsetBottom - this.offsetTop;
   },
 
   getElementDistanceFromDocumentTop: function() {

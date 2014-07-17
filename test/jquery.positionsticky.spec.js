@@ -31,6 +31,12 @@ describe("PositionSticky", function() {
       expect(instance.setOffsetTop).toHaveBeenCalled();
     });
 
+    it("calls #setOffsetBottom", function() {
+      spyOn(PositionSticky, 'setOffsetBottom');
+      var instance = PositionSticky.create(element);
+      expect(instance.setOffsetBottom).toHaveBeenCalled();
+    });
+
     it("calls #calcThreshold", function() {
       spyOn(PositionSticky, 'calcThreshold');
       var instance = PositionSticky.create(element);
@@ -103,6 +109,21 @@ describe("PositionSticky", function() {
       });
     });
 
+  });
+
+  describe("#setOffsetBottom", function() {
+    it("sets container's padding-bottom and border-bottom-width as 'offsetBottom'", function() {
+      var instance = PositionSticky.create(element);
+
+      instance.container.style.setProperty('padding', '20px');
+      instance.container.style.setProperty('border', '10px solid black');
+
+      instance.setOffsetBottom();
+      expect(instance.offsetBottom).toEqual(30);
+
+      instance.container.style.removeProperty('padding');
+      instance.container.style.removeProperty('border');
+    });
   });
 
   describe("#calcThreshold", function() {
@@ -343,9 +364,10 @@ describe("PositionSticky", function() {
       expect(instance.element.style.getPropertyValue('position')).toEqual('absolute');
     });
 
-    it("sets sticky element's bottom to 0", function() {
+    it("assigns 'offsetBottom' to sticky element's bottom css property", function() {
+      instance.offsetBottom = 50;
       instance.makeAbsolute();
-      expect(instance.element.style.getPropertyValue('bottom')).toEqual('0px');
+      expect(instance.element.style.getPropertyValue('bottom')).toEqual('50px');
     });
 
     it("shows placeholder", function() {
@@ -449,27 +471,42 @@ describe("PositionSticky", function() {
   });
 
   describe("#canStickyFitInContainer", function() {
-    var instance;
+    var instance, getAvailableSpaceInContainerSpy;
 
     beforeEach(function() {
       instance = PositionSticky.create(element);
+      instance.element.style.setProperty('height', '100px');
+      getAvailableSpaceInContainerSpy = spyOn(instance, 'getAvailableSpaceInContainer');
     });
 
-    it("returns true when container.getBoundingClientRect().bottom is equal or bigger than sticky element's height", function() {
-      var containerSpy = spyOn(instance.container, 'getBoundingClientRect');
-      spyOn(instance.element, 'getBoundingClientRect').and.returnValue({height: 100});
+    afterEach(function() {
+      instance.element.style.removeProperty('height');
+    });
 
-      containerSpy.and.returnValue({bottom: 100});
+    it("returns true when visible portion of container's content height is equal or bigger than element's height", function() {
+      getAvailableSpaceInContainerSpy.and.returnValue(100);
       expect(instance.canStickyFitInContainer()).toBe(true);
 
-      containerSpy.and.returnValue({bottom: 101});
+      getAvailableSpaceInContainerSpy.and.returnValue(101);
       expect(instance.canStickyFitInContainer()).toBe(true);
     });
 
     it("returns false otherwise", function() {
-      spyOn(instance.element, 'getBoundingClientRect').and.returnValue({height: 99});
+      getAvailableSpaceInContainerSpy.and.returnValue(99);
       expect(instance.canStickyFitInContainer()).toBe(false);
     })
+  });
+
+  describe("#getAvailableSpaceInContainer", function() {
+    it("calculates and returns available visible portion of the container's height", function() {
+      var instance = PositionSticky.create(element);
+
+      instance.offsetTop = 15;
+      instance.offsetBottom = 15;
+      spyOn(instance.container, 'getBoundingClientRect').and.returnValue({bottom: 100});
+
+      expect(instance.getAvailableSpaceInContainer()).toEqual(70);
+    });
   });
 
   describe("#getElementDistanceFromDocumentTop", function() {
