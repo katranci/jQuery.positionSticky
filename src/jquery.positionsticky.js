@@ -4,11 +4,14 @@ PositionSticky = {
   POS_SCHEME_FIXED:    200,
   POS_SCHEME_ABSOLUTE: 300,
 
-  create: function(element) {
-    return Object.create(PositionSticky).init(element);
+  create: function(element, options) {
+    if (typeof options === 'undefined') {
+      options = {};
+    }
+    return Object.create(PositionSticky).init(element, options);
   },
 
-  init: function(element) {
+  init: function(element, options) {
     this.constructor = PositionSticky;
     this.window = window;
     this.element = element;
@@ -16,6 +19,7 @@ PositionSticky = {
     this.posScheme = null;
     this.isTicking = false;
     this.threshold = null;
+    this.options = options;
 
     this.validateContainerPosScheme();
     this.setOffsetTop();
@@ -35,11 +39,13 @@ PositionSticky = {
   },
 
   setOffsetTop: function() {
-    var top = this.window.getComputedStyle(this.element).getPropertyValue('top');
-    if (top === 'auto') {
-      top = 0;
+    if (typeof this.options.offsetTop === 'number' && this.options.offsetTop >= 0) {
+      this.offsetTop = this.options.offsetTop;
+    } else {
+      var topBorderWidth = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('border-top-width'), 10);
+      var topPadding = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('padding-top'), 10);
+      this.offsetTop = topBorderWidth + topPadding;
     }
-    this.offsetTop = parseInt(top, 10);
   },
 
   setOffsetBottom: function() {
@@ -49,7 +55,7 @@ PositionSticky = {
   },
 
   calcThreshold: function() {
-    this.threshold = this.getElementDistanceFromDocumentTop() + this.offsetTop;
+    this.threshold = this.getElementDistanceFromDocumentTop() - this.offsetTop;
   },
 
   createPlaceholder: function() {
@@ -94,7 +100,7 @@ PositionSticky = {
   makeFixed: function() {
     this.element.style.removeProperty('bottom');
     this.element.style.setProperty('position', 'fixed');
-    this.element.style.setProperty('top', '0px');
+    this.element.style.setProperty('top', this.offsetTop + 'px');
     this.placeholder.style.setProperty('display', 'block');
     this.posScheme = PositionSticky.POS_SCHEME_FIXED;
   },

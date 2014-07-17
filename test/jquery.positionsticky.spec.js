@@ -93,19 +93,33 @@ describe("PositionSticky", function() {
 
   describe("#setOffsetTop", function() {
 
-    describe("when element's computed 'top' css property value is not auto", function() {
+    describe("when offsetTop is given in options and it is zero or a positive integer", function() {
       it("assigns that to 'offsetTop'", function() {
-        element.style.setProperty('top', '15px');
-        var instance = PositionSticky.create(element);
-        expect(instance.offsetTop).toEqual(15);
-        element.style.removeProperty('top');
-      })
+        var instance;
+
+        instance = PositionSticky.create(element, {offsetTop: 0});
+        expect(instance.offsetTop).toEqual(0);
+
+        instance = PositionSticky.create(element, {offsetTop: 1});
+        expect(instance.offsetTop).toEqual(1);
+      });
     });
 
     describe("otherwise", function() {
-      it("sets 'offsetTop' as 0", function() {
+      it("calculates container's padding-top and border-top-width and sets that as 'offsetTop'", function() {
+        var setOffsetTopSpy = spyOn(PositionSticky, 'setOffsetTop');
         var instance = PositionSticky.create(element);
-        expect(instance.offsetTop).toEqual(0);
+
+        instance.container.style.setProperty('padding', '20px');
+        instance.container.style.setProperty('border', '10px solid black');
+
+        setOffsetTopSpy.and.callThrough();
+        instance.setOffsetTop();
+
+        expect(instance.offsetTop).toEqual(30);
+
+        instance.container.style.removeProperty('padding');
+        instance.container.style.removeProperty('border');
       });
     });
 
@@ -128,14 +142,14 @@ describe("PositionSticky", function() {
 
   describe("#calcThreshold", function() {
 
-    it("returns sum of #getElementDistanceFromDocumentTop and 'offsetTop'", function() {
+    it("returns #getElementDistanceFromDocumentTop - 'offsetTop'", function() {
       var instance = PositionSticky.create(element);
 
       spyOn(instance, 'getElementDistanceFromDocumentTop').and.returnValue(100);
       instance.offsetTop = 10;
       instance.calcThreshold();
 
-      expect(instance.threshold).toEqual(110);
+      expect(instance.threshold).toEqual(90);
     });
 
   });
@@ -305,9 +319,10 @@ describe("PositionSticky", function() {
       expect(instance.element.style.getPropertyValue('position')).toEqual('fixed');
     });
 
-    it("sets sticky element's top to 0", function() {
+    it("assigns 'offsetTop' top element's top style property", function() {
+      instance.offsetTop = 50;
       instance.makeFixed();
-      expect(instance.element.style.getPropertyValue('top')).toEqual('0px');
+      expect(instance.element.style.getPropertyValue('top')).toEqual('50px');
     });
 
     it("shows placeholder", function() {
