@@ -20,6 +20,7 @@ PositionSticky = {
     this.validateContainerPosScheme();
     this.setOffsetTop();
     this.calcThreshold();
+    this.createPlaceholder();
     this.subscribeToWindowScroll();
 
     return this;
@@ -44,6 +45,19 @@ PositionSticky = {
     this.threshold = this.getElementDistanceFromDocumentTop() + this.offsetTop;
   },
 
+  createPlaceholder: function() {
+    var placeholder = document.createElement('DIV');
+    var width = this.element.getBoundingClientRect().width + 'px';
+    var height = this.element.getBoundingClientRect().height + 'px';
+
+    placeholder.style.setProperty('display', 'none');
+    placeholder.style.setProperty('width', width);
+    placeholder.style.setProperty('height', height);
+
+    this.container.insertBefore(placeholder, this.element);
+    this.placeholder = placeholder;
+  },
+
   subscribeToWindowScroll: function() {
     this.window.addEventListener('scroll', this.onScroll.bind(this));
   },
@@ -61,6 +75,7 @@ PositionSticky = {
 
   makeStatic: function() {
     this.element.style.setProperty('position', 'static');
+    this.placeholder.style.setProperty('display', 'none');
     this.posScheme = PositionSticky.POS_SCHEME_STATIC;
   },
 
@@ -72,6 +87,7 @@ PositionSticky = {
     this.element.style.removeProperty('bottom');
     this.element.style.setProperty('position', 'fixed');
     this.element.style.setProperty('top', '0px');
+    this.placeholder.style.setProperty('display', 'block');
     this.posScheme = PositionSticky.POS_SCHEME_FIXED;
   },
 
@@ -83,6 +99,7 @@ PositionSticky = {
     this.element.style.removeProperty('top');
     this.element.style.setProperty('position', 'absolute');
     this.element.style.setProperty('bottom', '0px');
+    this.placeholder.style.setProperty('display', 'block');
     this.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
   },
 

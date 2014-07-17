@@ -37,6 +37,12 @@ describe("PositionSticky", function() {
       expect(instance.calcThreshold).toHaveBeenCalled();
     });
 
+    it("calls #createPlaceholder", function() {
+      spyOn(PositionSticky, 'createPlaceholder');
+      var instance = PositionSticky.create(element);
+      expect(instance.createPlaceholder).toHaveBeenCalled();
+    });
+
     it("calls #subscribeToWindowScroll", function() {
       spyOn(PositionSticky, 'subscribeToWindowScroll');
       var instance = PositionSticky.create(element);
@@ -99,7 +105,6 @@ describe("PositionSticky", function() {
 
   });
 
-
   describe("#calcThreshold", function() {
 
     it("returns sum of #getElementDistanceFromDocumentTop and 'offsetTop'", function() {
@@ -112,6 +117,27 @@ describe("PositionSticky", function() {
       expect(instance.threshold).toEqual(110);
     });
 
+  });
+
+  describe("#createPlaceholder", function() {
+    it("creates a hidden div with the same dimensions as the sticky element and inserts it just before the sticky element", function() {
+      var spy = spyOn(PositionSticky, 'createPlaceholder');
+
+      element.style.setProperty('width', '400px');
+      element.style.setProperty('height', '200px');
+
+      var instance = PositionSticky.create(element);
+      spy.and.callThrough();
+      instance.createPlaceholder();
+
+      expect(instance.element.previousElementSibling).toBe(instance.placeholder);
+      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('none');
+      expect(instance.placeholder.style.getPropertyValue('width')).toEqual('400px');
+      expect(instance.placeholder.style.getPropertyValue('height')).toEqual('200px');
+
+      element.style.removeProperty('width');
+      element.style.removeProperty('height');
+    });
   });
 
   describe("#subscribeToWindowScroll", function() {
@@ -187,6 +213,12 @@ describe("PositionSticky", function() {
       expect(instance.element.style.getPropertyValue('position')).toEqual('static');
     });
 
+    it("hides placeholder", function() {
+      instance.placeholder.style.setProperty('display', 'block');
+      instance.makeStatic();
+      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('none');
+    });
+
     it("updates posScheme to PositionSticky.POS_SCHEME_STATIC", function() {
       instance.makeStatic();
       expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_STATIC);
@@ -240,6 +272,12 @@ describe("PositionSticky", function() {
       expect(instance.element.style.getPropertyValue('top')).toEqual('0px');
     });
 
+    it("shows placeholder", function() {
+      instance.placeholder.style.setProperty('display', 'none');
+      instance.makeFixed();
+      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('block');
+    });
+
     it("updates posScheme to PositionSticky.POS_SCHEME_FIXED", function() {
       instance.makeFixed();
       expect(instance.posScheme).toBe(PositionSticky.POS_SCHEME_FIXED);
@@ -269,7 +307,7 @@ describe("PositionSticky", function() {
     });
   });
 
-  describe("#makeFixed", function() {
+  describe("#makeAbsolute", function() {
 
     var instance;
 
@@ -291,6 +329,12 @@ describe("PositionSticky", function() {
     it("sets sticky element's bottom to 0", function() {
       instance.makeAbsolute();
       expect(instance.element.style.getPropertyValue('bottom')).toEqual('0px');
+    });
+
+    it("shows placeholder", function() {
+      instance.placeholder.style.setProperty('display', 'none');
+      instance.makeAbsolute();
+      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('block');
     });
 
     it("updates posScheme to PositionSticky.POS_SCHEME_ABSOLUTE", function() {
