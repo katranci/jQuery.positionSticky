@@ -53,6 +53,7 @@ PositionSticky = {
     placeholder.style.setProperty('display', 'none');
     placeholder.style.setProperty('width', width);
     placeholder.style.setProperty('height', height);
+    this.element.style.setProperty('width', width);
 
     this.container.insertBefore(placeholder, this.element);
     this.placeholder = placeholder;

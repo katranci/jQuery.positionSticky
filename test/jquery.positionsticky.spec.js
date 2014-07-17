@@ -120,23 +120,40 @@ describe("PositionSticky", function() {
   });
 
   describe("#createPlaceholder", function() {
+
+    var spy, instance;
+
+    beforeEach(function() {
+      // Prevent createPlaceholder to run on object initialization
+      spy = spyOn(PositionSticky, 'createPlaceholder');
+
+      instance = PositionSticky.create(element);
+      instance.container.style.setProperty('width', '100px');
+      instance.element.style.setProperty('height', '200px');
+    });
+
+    afterEach(function() {
+      instance.container.style.removeProperty('width');
+      instance.element.style.removeProperty('height');
+    });
+
     it("creates a hidden div with the same dimensions as the sticky element and inserts it just before the sticky element", function() {
-      var spy = spyOn(PositionSticky, 'createPlaceholder');
-
-      element.style.setProperty('width', '400px');
-      element.style.setProperty('height', '200px');
-
-      var instance = PositionSticky.create(element);
+      // Now run createPlaceholder
       spy.and.callThrough();
       instance.createPlaceholder();
 
       expect(instance.element.previousElementSibling).toBe(instance.placeholder);
       expect(instance.placeholder.style.getPropertyValue('display')).toEqual('none');
-      expect(instance.placeholder.style.getPropertyValue('width')).toEqual('400px');
+      expect(instance.placeholder.style.getPropertyValue('width')).toEqual('100px');
       expect(instance.placeholder.style.getPropertyValue('height')).toEqual('200px');
+    });
 
-      element.style.removeProperty('width');
-      element.style.removeProperty('height');
+    it("applies element's computed width to its inline styling", function() {
+      // Now run createPlaceholder
+      spy.and.callThrough();
+      instance.createPlaceholder();
+
+      expect(instance.element.style.getPropertyValue('width')).toEqual('100px');
     });
   });
 
