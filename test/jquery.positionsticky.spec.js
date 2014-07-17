@@ -463,25 +463,24 @@ describe("PositionSticky", function() {
 
   describe("#isBelowThreshold", function() {
 
-    var isBelowThreshold, mockWindow;
+    var instance;
 
     beforeEach(function() {
-      mockWindow = { scrollY: 0 };
-      var mock = { window: mockWindow, threshold: 100 };
-      isBelowThreshold = PositionSticky.isBelowThreshold.bind(mock);
+      instance = PositionSticky.create(element);
+      instance.threshold = 100;
     });
 
-    it("returns true when window.scrollY is smaller than the threshold", function() {
-      mockWindow.scrollY = 99;
-      expect(isBelowThreshold()).toBe(true);
+    it("returns true when latestKnownScrollY is smaller than the threshold", function() {
+      instance.latestKnownScrollY = 99;
+      expect(instance.isBelowThreshold()).toBe(true);
     });
 
     it("returns false otherwise", function() {
-      mockWindow.scrollY = 100;
-      expect(isBelowThreshold()).toBe(false);
+      instance.latestKnownScrollY = 100;
+      expect(instance.isBelowThreshold()).toBe(false);
 
-      mockWindow.scrollY = 101;
-      expect(isBelowThreshold()).toBe(false);
+      instance.latestKnownScrollY = 101;
+      expect(instance.isBelowThreshold()).toBe(false);
     });
   });
 
@@ -528,14 +527,10 @@ describe("PositionSticky", function() {
 
     describe("if the page is not scrolled", function() {
       it("returns element.getBoundingClientRect().top", function() {
+        var instance = PositionSticky.create(element);
+        instance.latestKnownScrollY = 0;
         spyOn(element, 'getBoundingClientRect').and.returnValue({top: 1000});
-
-        var mockWindow = { scrollY: 0 };
-        var mock = { element: element, window: mockWindow };
-
-        getElementDistanceFromDocumentTop = PositionSticky.getElementDistanceFromDocumentTop.bind(mock);
-
-        expect(getElementDistanceFromDocumentTop()).toEqual(1000);
+        expect(instance.getElementDistanceFromDocumentTop()).toEqual(1000);
       });
     });
 

@@ -1,3 +1,6 @@
+/**
+ * TODO: Don't run update when container is not visible
+ */
 PositionSticky = {
 
   POS_SCHEME_STATIC:   100,
@@ -20,6 +23,7 @@ PositionSticky = {
     this.isTicking = false;
     this.threshold = null;
     this.options = options;
+    this.latestKnownScrollY = this.window.scrollY;
 
     this.validateContainerPosScheme();
     this.setOffsetTop();
@@ -78,6 +82,7 @@ PositionSticky = {
 
   onScroll: function() {
     if (!this.isTicking) {
+      this.latestKnownScrollY = this.window.scrollY;
       this.window.requestAnimationFrame(this.update.bind(this));
       this.isTicking = true;
     }
@@ -136,7 +141,7 @@ PositionSticky = {
   },
 
   isBelowThreshold: function() {
-    if (this.window.scrollY < this.threshold) {
+    if (this.latestKnownScrollY < this.threshold) {
       return true;
     }
     return false;
@@ -151,7 +156,7 @@ PositionSticky = {
   },
 
   getElementDistanceFromDocumentTop: function() {
-    if (this.window.scrollY === 0) {
+    if (this.latestKnownScrollY === 0) {
       return this.element.getBoundingClientRect().top;
     }
 
