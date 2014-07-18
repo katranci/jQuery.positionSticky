@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PositionSticky Demo Sidebar</title>
+  <style>
+    body, h2 {margin: 0;}
+    body {padding: 0 20% 1000px; background: #FFFFFF; font: 1.2rem sans-serif;}
+
+    #main {box-sizing: border-box; display: table; width: 100%; margin: 50px 0; padding: 20px; background: #D9E8F5;}
+    #body {display: table-cell; vertical-align: top; padding-right: 20px;}
+    #body p:first-child {margin-top: 0;}
+    #sidebar {display: table-cell; width: 30%;}
+
+    .sticky {padding: 10px; border: 10px solid rgba(0,0,0,0.3); background: #304269; color: #FFFFFF;}
+  </style>
+</head>
+<body>
+
+  <div id="main">
+    <div id="body">
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vel sem quam. Sed posuere interdum laoreet. Ut ut tortor vitae dolor consectetur suscipit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vehicula justo in odio vehicula pellentesque. Quisque erat ante, euismod eu magna in, viverra interdum quam. Mauris convallis, tellus rutrum porttitor rhoncus, velit tortor vulputate quam, ut accumsan ante justo sit amet purus. Fusce at iaculis augue, in blandit erat. Sed ac libero eleifend, interdum turpis sed, fermentum velit.</p>
+      <p>In ut turpis nulla. Morbi ut ante erat. Donec pharetra, lorem at vehicula gravida, dui tellus luctus risus, vel pharetra libero tortor ut orci. Nullam pulvinar magna dapibus malesuada laoreet. Etiam placerat interdum pharetra. Suspendisse potenti. Donec consectetur ligula eu turpis pretium tempus. Duis in rhoncus nisi. Phasellus porta mauris at leo pulvinar, sed congue tortor mollis. Nullam porttitor gravida lorem fermentum tincidunt. Etiam auctor bibendum risus, vitae mattis lorem imperdiet nec. Mauris non posuere enim, et dictum nibh. Aenean ac purus sodales, interdum augue sed, dignissim nisl.</p>
+    </div>
+    <div id="sidebar">
+      <div class="sticky">
+        Sidebar
+      </div>
+    </div>
+  </div>
+
+  <script src="../dist/PositionSticky.js"></script>
+  <script>
+    var element = document.querySelector('.sticky');
+    var positionSticky = PositionSticky.create(element, {offsetTop: 20});
+  </script>
+
+</body>
+</html>
