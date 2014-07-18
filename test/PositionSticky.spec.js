@@ -171,21 +171,39 @@ describe("PositionSticky", function() {
   });
 
   describe("#createPlaceholder", function() {
-    it("creates a hidden div with the same dimensions as the sticky element and inserts it just before the sticky element", function() {
-      spyOn(PositionSticky, 'setElementWidth');
-      var spy = spyOn(PositionSticky, 'createPlaceholder');
-      var instance = PositionStickyFactory.create();
 
+    var instance, createPlaceholderSpy;
+
+    beforeEach(function() {
+      createPlaceholderSpy = spyOn(PositionSticky, 'createPlaceholder');
+    });
+
+    it("creates a hidden div with the same box model properties as the sticky element and inserts it just before the sticky element", function() {
+      spyOn(PositionSticky, 'setElementWidth');
+
+      instance = PositionStickyFactory.create();
       instance.container.style.width = '100px';
       instance.element.style.height = '200px';
+      instance.element.style.margin = '10px';
 
-      spy.and.callThrough();
+      createPlaceholderSpy.and.callThrough();
       instance.createPlaceholder();
 
       expect(instance.element.previousElementSibling).toBe(instance.placeholder);
       expect(instance.placeholder.style.display).toEqual('none');
-      expect(instance.placeholder.style.width).toEqual('100px');
+      expect(instance.placeholder.style.width).toEqual('80px');
       expect(instance.placeholder.style.height).toEqual('200px');
+      expect(instance.placeholder.style.margin).toEqual('10px');
+    });
+
+    it("applies sticky element's floating to the placeholder", function() {
+      instance = PositionStickyFactory.create();
+      instance.element.style.float = 'left';
+
+      createPlaceholderSpy.and.callThrough();
+      instance.createPlaceholder();
+
+      expect(instance.placeholder.style.float).toEqual('left');
     });
   });
 

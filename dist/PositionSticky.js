@@ -100,12 +100,17 @@ var PositionSticky = {
 
   createPlaceholder: function() {
     var placeholder = document.createElement('DIV');
-    var width = this.element.getBoundingClientRect().width + 'px';
-    var height = this.element.getBoundingClientRect().height + 'px';
+
+    var width   = this.element.getBoundingClientRect().width + 'px';
+    var height  = this.element.getBoundingClientRect().height + 'px';
+    var margin  = this.window.getComputedStyle(this.element).margin;
+    var float   = this.window.getComputedStyle(this.element).float;
 
     placeholder.style.display = 'none';
-    placeholder.style.width = width;
-    placeholder.style.height = height;
+    placeholder.style.width   = width;
+    placeholder.style.height  = height;
+    placeholder.style.margin  = margin;
+    placeholder.style.float   = float;
 
     this.container.insertBefore(placeholder, this.element);
     this.placeholder = placeholder;
