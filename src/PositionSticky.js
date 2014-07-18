@@ -20,7 +20,7 @@ var PositionSticky = {
     this.isTicking = false;
     this.threshold = null;
     this.options = options;
-    this.latestKnownScrollY = this.window.scrollY;
+    this.latestKnownScrollY = this.window.pageYOffset;
 
     this.validateContainerPosScheme();
     this.setOffsetTop();
@@ -92,7 +92,7 @@ var PositionSticky = {
    */
   onScroll: function() {
     if (!this.isTicking) {
-      this.latestKnownScrollY = this.window.scrollY;
+      this.latestKnownScrollY = this.window.pageYOffset;
       this.window.requestAnimationFrame(this.update.bind(this));
       this.isTicking = true;
     }
