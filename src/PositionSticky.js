@@ -1,6 +1,3 @@
-/**
- * TODO: Don't run update when container is not visible
- */
 var PositionSticky = {
 
   POS_SCHEME_STATIC:   100,
@@ -74,7 +71,7 @@ var PositionSticky = {
     var width   = this.element.getBoundingClientRect().width + 'px';
     var height  = this.element.getBoundingClientRect().height + 'px';
     var margin  = this.window.getComputedStyle(this.element).margin;
-    var float   = this.window.getComputedStyle(this.element).float;
+    var float   = this.window.getComputedStyle(this.element).float; // TODO: Doesn't work on Firefox
 
     placeholder.style.display = 'none';
     placeholder.style.width   = width;
@@ -90,6 +87,9 @@ var PositionSticky = {
     this.window.addEventListener('scroll', this.onScroll.bind(this));
   },
 
+  /**
+   * TODO: Don't run update when container is not visible
+   */
   onScroll: function() {
     if (!this.isTicking) {
       this.latestKnownScrollY = this.window.scrollY;
