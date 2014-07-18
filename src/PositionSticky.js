@@ -37,9 +37,9 @@ var PositionSticky = {
   },
 
   validateContainerPosScheme: function() {
-    var containerPosScheme = this.container.style.getPropertyValue('position');
+    var containerPosScheme = this.container.style.position;
     if (containerPosScheme != 'relative' && containerPosScheme != 'absolute') {
-      this.container.style.setProperty('position', 'relative');
+      this.container.style.position = 'relative';
     }
   },
 
@@ -47,15 +47,15 @@ var PositionSticky = {
     if (typeof this.options.offsetTop === 'number' && this.options.offsetTop >= 0) {
       this.offsetTop = this.options.offsetTop;
     } else {
-      var topBorderWidth = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('border-top-width'), 10);
-      var topPadding = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('padding-top'), 10);
+      var topBorderWidth = parseInt(this.window.getComputedStyle(this.container).borderTopWidth, 10);
+      var topPadding = parseInt(this.window.getComputedStyle(this.container).paddingTop, 10);
       this.offsetTop = topBorderWidth + topPadding;
     }
   },
 
   setOffsetBottom: function() {
-    var bottomBorderWidth = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('border-bottom-width'), 10);
-    var bottomPadding = parseInt(this.window.getComputedStyle(this.container).getPropertyValue('padding-bottom'), 10);
+    var bottomBorderWidth = parseInt(this.window.getComputedStyle(this.container).borderBottomWidth, 10);
+    var bottomPadding = parseInt(this.window.getComputedStyle(this.container).paddingBottom, 10);
     this.offsetBottom = bottomBorderWidth + bottomPadding;
   },
 
@@ -64,8 +64,8 @@ var PositionSticky = {
   },
 
   setElementWidth: function() {
-    var width = this.window.getComputedStyle(this.element).getPropertyValue('width');
-    this.element.style.setProperty('width', width);
+    var width = this.window.getComputedStyle(this.element).width;
+    this.element.style.width = width;
   },
 
   createPlaceholder: function() {
@@ -73,9 +73,9 @@ var PositionSticky = {
     var width = this.element.getBoundingClientRect().width + 'px';
     var height = this.element.getBoundingClientRect().height + 'px';
 
-    placeholder.style.setProperty('display', 'none');
-    placeholder.style.setProperty('width', width);
-    placeholder.style.setProperty('height', height);
+    placeholder.style.display = 'none';
+    placeholder.style.width = width;
+    placeholder.style.height = height;
 
     this.container.insertBefore(placeholder, this.element);
     this.placeholder = placeholder;
@@ -98,8 +98,8 @@ var PositionSticky = {
   },
 
   makeStatic: function() {
-    this.element.style.setProperty('position', 'static');
-    this.placeholder.style.setProperty('display', 'none');
+    this.element.style.position = 'static';
+    this.placeholder.style.display = 'none';
     this.posScheme = PositionSticky.POS_SCHEME_STATIC;
   },
 
@@ -108,10 +108,10 @@ var PositionSticky = {
   },
 
   makeFixed: function() {
-    this.element.style.removeProperty('bottom');
-    this.element.style.setProperty('position', 'fixed');
-    this.element.style.setProperty('top', this.offsetTop + 'px');
-    this.placeholder.style.setProperty('display', 'block');
+    this.element.style.bottom = null;
+    this.element.style.position = 'fixed';
+    this.element.style.top = this.offsetTop + 'px';
+    this.placeholder.style.display = 'block';
     this.posScheme = PositionSticky.POS_SCHEME_FIXED;
   },
 
@@ -120,10 +120,10 @@ var PositionSticky = {
   },
 
   makeAbsolute: function() {
-    this.element.style.removeProperty('top');
-    this.element.style.setProperty('position', 'absolute');
-    this.element.style.setProperty('bottom', this.offsetBottom + 'px');
-    this.placeholder.style.setProperty('display', 'block');
+    this.element.style.top = null;
+    this.element.style.position = 'absolute';
+    this.element.style.bottom = this.offsetBottom + 'px';
+    this.placeholder.style.display = 'block';
     this.posScheme = PositionSticky.POS_SCHEME_ABSOLUTE;
   },
 

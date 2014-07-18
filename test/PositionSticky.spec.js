@@ -69,7 +69,7 @@ describe("PositionSticky", function() {
 
         validateContainerPosScheme();
 
-        expect(container.style.getPropertyValue('position')).toEqual('relative');
+        expect(container.style.position).toEqual('relative');
       });
 
     });
@@ -78,13 +78,13 @@ describe("PositionSticky", function() {
 
       it("doesn't change container's positioning scheme", function() {
         var container = document.getElementById('container');
-        container.style.setProperty('position', 'absolute');
+        container.style.position = 'absolute';
         var mock = { container: container };
         var validateContainerPosScheme = PositionSticky.validateContainerPosScheme.bind(mock);
 
         validateContainerPosScheme();
 
-        expect(container.style.getPropertyValue('position')).toEqual('absolute');
+        expect(container.style.position).toEqual('absolute');
       });
 
     });
@@ -110,16 +110,16 @@ describe("PositionSticky", function() {
         var setOffsetTopSpy = spyOn(PositionSticky, 'setOffsetTop');
         var instance = PositionStickyFactory.create();
 
-        instance.container.style.setProperty('padding', '20px');
-        instance.container.style.setProperty('border', '10px solid black');
+        instance.container.style.padding = '20px';
+        instance.container.style.border = '10px solid black';
 
         setOffsetTopSpy.and.callThrough();
         instance.setOffsetTop();
 
         expect(instance.offsetTop).toEqual(30);
 
-        instance.container.style.removeProperty('padding');
-        instance.container.style.removeProperty('border');
+        instance.container.style.padding = null;
+        instance.container.style.border = null;
       });
     });
 
@@ -129,14 +129,14 @@ describe("PositionSticky", function() {
     it("sets container's padding-bottom and border-bottom-width as 'offsetBottom'", function() {
       var instance = PositionStickyFactory.create();
 
-      instance.container.style.setProperty('padding', '20px');
-      instance.container.style.setProperty('border', '10px solid black');
+      instance.container.style.padding = '20px';
+      instance.container.style.border = '10px solid black';
 
       instance.setOffsetBottom();
       expect(instance.offsetBottom).toEqual(30);
 
-      instance.container.style.removeProperty('padding');
-      instance.container.style.removeProperty('border');
+      instance.container.style.padding = null;
+      instance.container.style.border = null;
     });
   });
 
@@ -159,14 +159,14 @@ describe("PositionSticky", function() {
       var spy = spyOn(PositionSticky, 'setElementWidth');
       var instance = PositionStickyFactory.create();
 
-      instance.container.style.setProperty('width', '1000px');
-      instance.element.style.setProperty('padding', '25px');
-      instance.element.style.setProperty('border', '25px solid black');
+      instance.container.style.width = '1000px';
+      instance.element.style.padding = '25px';
+      instance.element.style.border = '25px solid black';
 
       spy.and.callThrough();
       instance.setElementWidth();
 
-      expect(instance.element.style.getPropertyValue('width')).toEqual('900px');
+      expect(instance.element.style.width).toEqual('900px');
     });
   });
 
@@ -176,16 +176,16 @@ describe("PositionSticky", function() {
       var spy = spyOn(PositionSticky, 'createPlaceholder');
       var instance = PositionStickyFactory.create();
 
-      instance.container.style.setProperty('width', '100px');
-      instance.element.style.setProperty('height', '200px');
+      instance.container.style.width = '100px';
+      instance.element.style.height = '200px';
 
       spy.and.callThrough();
       instance.createPlaceholder();
 
       expect(instance.element.previousElementSibling).toBe(instance.placeholder);
-      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('none');
-      expect(instance.placeholder.style.getPropertyValue('width')).toEqual('100px');
-      expect(instance.placeholder.style.getPropertyValue('height')).toEqual('200px');
+      expect(instance.placeholder.style.display).toEqual('none');
+      expect(instance.placeholder.style.width).toEqual('100px');
+      expect(instance.placeholder.style.height).toEqual('200px');
     });
   });
 
@@ -259,13 +259,13 @@ describe("PositionSticky", function() {
 
     it("sets sticky element's position to 'static'", function() {
       instance.makeStatic();
-      expect(instance.element.style.getPropertyValue('position')).toEqual('static');
+      expect(instance.element.style.position).toEqual('static');
     });
 
     it("hides placeholder", function() {
-      instance.placeholder.style.setProperty('display', 'block');
+      instance.placeholder.style.display = 'block';
       instance.makeStatic();
-      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('none');
+      expect(instance.placeholder.style.display).toEqual('none');
     });
 
     it("updates posScheme to PositionSticky.POS_SCHEME_STATIC", function() {
@@ -306,26 +306,26 @@ describe("PositionSticky", function() {
     });
 
     it("removes bottom property in case sticky element had absolute positioning before", function() {
-      instance.element.style.setProperty('bottom', '0px');
+      instance.element.style.bottom = '0px';
       instance.makeFixed();
-      expect(instance.element.style.getPropertyValue('bottom')).toBeNull();
+      expect(instance.element.style.bottom).toEqual('');
     });
 
     it("sets sticky element's position to 'fixed'", function() {
       instance.makeFixed();
-      expect(instance.element.style.getPropertyValue('position')).toEqual('fixed');
+      expect(instance.element.style.position).toEqual('fixed');
     });
 
     it("assigns 'offsetTop' top element's top style property", function() {
       instance.offsetTop = 50;
       instance.makeFixed();
-      expect(instance.element.style.getPropertyValue('top')).toEqual('50px');
+      expect(instance.element.style.top).toEqual('50px');
     });
 
     it("shows placeholder", function() {
-      instance.placeholder.style.setProperty('display', 'none');
+      instance.placeholder.style.display = 'none';
       instance.makeFixed();
-      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('block');
+      expect(instance.placeholder.style.display).toEqual('block');
     });
 
     it("updates posScheme to PositionSticky.POS_SCHEME_FIXED", function() {
@@ -366,26 +366,26 @@ describe("PositionSticky", function() {
     });
 
     it("removes top property in case sticky element had static positioning before", function() {
-      instance.element.style.setProperty('top', '0px');
+      instance.element.style.top = '0px';
       instance.makeAbsolute();
-      expect(instance.element.style.getPropertyValue('top')).toBeNull();
+      expect(instance.element.style.top).toEqual('');
     });
 
     it("sets sticky element's position to 'absolute'", function() {
       instance.makeAbsolute();
-      expect(instance.element.style.getPropertyValue('position')).toEqual('absolute');
+      expect(instance.element.style.position).toEqual('absolute');
     });
 
     it("assigns 'offsetBottom' to sticky element's bottom css property", function() {
       instance.offsetBottom = 50;
       instance.makeAbsolute();
-      expect(instance.element.style.getPropertyValue('bottom')).toEqual('50px');
+      expect(instance.element.style.bottom).toEqual('50px');
     });
 
     it("shows placeholder", function() {
-      instance.placeholder.style.setProperty('display', 'none');
+      instance.placeholder.style.display = 'none';
       instance.makeAbsolute();
-      expect(instance.placeholder.style.getPropertyValue('display')).toEqual('block');
+      expect(instance.placeholder.style.display).toEqual('block');
     });
 
     it("updates posScheme to PositionSticky.POS_SCHEME_ABSOLUTE", function() {
@@ -486,12 +486,12 @@ describe("PositionSticky", function() {
 
     beforeEach(function() {
       instance = PositionStickyFactory.create();
-      instance.element.style.setProperty('height', '100px');
+      instance.element.style.height = '100px';
       getAvailableSpaceInContainerSpy = spyOn(instance, 'getAvailableSpaceInContainer');
     });
 
     afterEach(function() {
-      instance.element.style.removeProperty('height');
+      instance.element.style.height = null;
     });
 
     it("returns true when visible portion of container's content height is equal or bigger than element's height", function() {
@@ -535,17 +535,17 @@ describe("PositionSticky", function() {
       it("returns total offsetTop", function() {
         var instance = PositionStickyFactory.create();
 
-        instance.container.ownerDocument.body.style.setProperty('margin-top', '100px');
-        instance.container.ownerDocument.body.style.setProperty('padding-top', '100px');
-        instance.container.style.setProperty('margin-top', '100px');
-        instance.container.style.setProperty('padding-top', '100px');
-        instance.element.style.setProperty('margin-top', '100px');
+        instance.container.ownerDocument.body.style.marginTop = '100px';
+        instance.container.ownerDocument.body.style.paddingTop = '100px';
+        instance.container.style.marginTop = '100px';
+        instance.container.style.paddingTop = '100px';
+        instance.element.style.marginTop = '100px';
 
         expect(instance.getElementDistanceFromDocumentTop()).toEqual(500);
 
-        instance.container.style.removeProperty('margin-top');
-        instance.container.style.removeProperty('padding-top');
-        instance.element.style.removeProperty('margin-top');
+        instance.container.style.marginTop = null;
+        instance.container.style.paddingTop = null;
+        instance.element.style.marginTop = null;
       });
     });
 
