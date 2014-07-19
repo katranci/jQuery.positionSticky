@@ -16,10 +16,11 @@ var PositionSticky = {
     this.window = window;
     this.element = element;
     this.container = element.parentNode;
-    this.posScheme = null;
+    this.posScheme = PositionSticky.POS_SCHEME_STATIC;
     this.isTicking = false;
     this.threshold = null;
     this.options = options;
+    this.boundingBoxHeight = null;
     this.latestKnownScrollY = this.window.pageYOffset;
 
     this.validateContainerPosScheme();
@@ -27,6 +28,7 @@ var PositionSticky = {
     this.setOffsetBottom();
     this.calcThreshold();
     this.setElementWidth();
+    this.setBoundingBoxHeight();
     this.createPlaceholder();
     this.subscribeToWindowScroll();
 
@@ -65,11 +67,18 @@ var PositionSticky = {
     this.element.style.width = width;
   },
 
+  setBoundingBoxHeight: function(updatePlaceholder) {
+    this.boundingBoxHeight = this.element.getBoundingClientRect().height;
+    if (updatePlaceholder === true) {
+      this.placeholder.style.height = this.boundingBoxHeight + 'px';
+    }
+  },
+
   createPlaceholder: function() {
     var placeholder = document.createElement('DIV');
 
     var width   = this.element.getBoundingClientRect().width + 'px';
-    var height  = this.element.getBoundingClientRect().height + 'px';
+    var height  = this.boundingBoxHeight + 'px';
     var margin  = this.window.getComputedStyle(this.element).margin;
     var float   = this.window.getComputedStyle(this.element).float; // TODO: Doesn't work on Firefox
 
@@ -158,7 +167,7 @@ var PositionSticky = {
   },
 
   canStickyFitInContainer: function() {
-    return this.getAvailableSpaceInContainer() >= this.element.getBoundingClientRect().height;
+    return this.getAvailableSpaceInContainer() >= this.boundingBoxHeight;
   },
 
   getAvailableSpaceInContainer: function() {
@@ -166,17 +175,23 @@ var PositionSticky = {
   },
 
   getElementDistanceFromDocumentTop: function() {
+    var element = (this.isStatic() ? this.element : this.placeholder);
+
     if (this.latestKnownScrollY === 0) {
-      return this.element.getBoundingClientRect().top;
+      return element.getBoundingClientRect().top;
     }
 
     var totalOffsetTop = 0;
-    var element = this.element;
     do {
       totalOffsetTop = totalOffsetTop + element.offsetTop;
     } while (element = element.offsetParent);
 
     return totalOffsetTop;
+  },
+
+  refresh: function() {
+    this.calcThreshold();
+    this.setBoundingBoxHeight(true);
   }
 
 };
