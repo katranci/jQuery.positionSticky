@@ -123,9 +123,6 @@ describe("PositionSticky", function() {
         instance.setOffsetTop();
 
         expect(instance.offsetTop).toEqual(30);
-
-        instance.container.style.padding = null;
-        instance.container.style.border = null;
       });
     });
 
@@ -140,9 +137,6 @@ describe("PositionSticky", function() {
 
       instance.setOffsetBottom();
       expect(instance.offsetBottom).toEqual(30);
-
-      instance.container.style.padding = null;
-      instance.container.style.border = null;
     });
   });
 
@@ -539,10 +533,6 @@ describe("PositionSticky", function() {
       getAvailableSpaceInContainerSpy = spyOn(instance, 'getAvailableSpaceInContainer');
     });
 
-    afterEach(function() {
-      instance.element.style.height = null;
-    });
-
     it("returns true when visible portion of container's content height is equal or bigger than element's height", function() {
       getAvailableSpaceInContainerSpy.and.returnValue(100);
       expect(instance.canStickyFitInContainer()).toBe(true);
@@ -589,9 +579,6 @@ describe("PositionSticky", function() {
       instance.container.ownerDocument.body.style.marginTop = null;
       instance.container.ownerDocument.body.style.borderTop = null;
       instance.container.ownerDocument.body.style.paddingTop = null;
-      instance.container.style.marginTop = null;
-      instance.container.style.paddingTop = null;
-      instance.element.style.marginTop = null;
     });
 
     it("uses placeholder in calculations when the element is not static", function() {
