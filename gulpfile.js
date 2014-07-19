@@ -3,6 +3,7 @@ var gulp    = require('gulp'),
     uglify  = require('gulp-uglify'),
     jshint  = require('gulp-jshint'),
     stylish = require('jshint-stylish'),
+    jsdoc   = require('gulp-jsdoc'),
     rename  = require('gulp-rename');
 
 
@@ -10,6 +11,7 @@ gulp.task('default', function() {
   gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
       .pipe(jshint())
       .pipe(jshint.reporter(stylish))
+      .pipe(jsdoc('./docs'))
       .pipe(concat('PositionSticky.js'))
       .pipe(gulp.dest('dist'))
       .pipe(uglify())

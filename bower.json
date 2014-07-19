@@ -7,7 +7,7 @@
   "description": "Sticky positioning polyfill with zero framework dependency",
   "main": "dist/PositionSticky.js",
   "ignore": [
-    "*", "!demos", "!dist"
+    "*", "!demos", "!dist", "!docs"
   ],
   "keywords": [
     "position", "sticky", "polyfill", "vanilla"
