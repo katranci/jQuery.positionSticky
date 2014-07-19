@@ -408,7 +408,7 @@ describe("PositionSticky", function() {
       instance = PositionStickyFactory.create();
     });
 
-    it("removes top property in case sticky element had static positioning before", function() {
+    it("removes top property in case sticky element had fixed positioning before", function() {
       instance.element.style.top = '0px';
       instance.makeAbsolute();
       expect(instance.element.style.top).toEqual('');
