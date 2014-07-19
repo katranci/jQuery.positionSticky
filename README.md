@@ -1,3 +1,25 @@
-Resources
----------
-* [Leaner, Meaner, Faster Animations with requestAnimationFrame](http://www.html5rocks.com/en/tutorials/speed/animations/)
+vanilla-position-sticky
+=======================
+
+```
+ --------------------------  
+|                          |=> window
+|   --------------------   |
+|  |                    |==|=> container
+|  |              ---   |  |
+|  |             |   |==|==|=> sticky
+|  |             |   |  |  |  
+|  |              ---   |  |
+|  |                    |  |
+|  |                    |  |
+|  |                    |  |
+|  |                    |  |
+```
+
+```
+var element = document.getElementById('sticky');
+var sticky  = PositionSticky.create(element);  
+```
+
+
+* Browser Support: IE9+
