@@ -176,16 +176,7 @@ var PositionSticky = {
 
   getElementDistanceFromDocumentTop: function() {
     var element = (this.isStatic() ? this.element : this.placeholder);
-
-    if (this.latestKnownScrollY === 0) {
-      return element.getBoundingClientRect().top;
-    }
-
-    var totalOffsetTop = 0;
-    do {
-      totalOffsetTop = totalOffsetTop + element.offsetTop;
-    } while (element = element.offsetParent);
-
+    var totalOffsetTop = this.latestKnownScrollY + element.getBoundingClientRect().top;
     return totalOffsetTop;
   },
 

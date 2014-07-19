@@ -571,47 +571,37 @@ describe("PositionSticky", function() {
 
   describe("#getElementDistanceFromDocumentTop", function() {
 
-    describe("if the page is not scrolled", function() {
-      it("returns element.getBoundingClientRect().top", function() {
-        var instance = PositionStickyFactory.create();
-        instance.latestKnownScrollY = 0;
-        spyOn(instance.element, 'getBoundingClientRect').and.returnValue({top: 1000});
-        expect(instance.getElementDistanceFromDocumentTop()).toEqual(1000);
-      });
+    it("returns total offsetTop", function() {
+      var instance = PositionStickyFactory.create();
+
+      instance.window.scrollTo(0, 100);
+
+      instance.container.ownerDocument.body.style.marginTop = '100px';
+      instance.container.ownerDocument.body.style.borderTop = '10px solid black';
+      instance.container.ownerDocument.body.style.paddingTop = '100px';
+      instance.container.style.marginTop = '100px';
+      instance.container.style.borderTop = '10px solid black';
+      instance.container.style.paddingTop = '100px';
+      instance.element.style.marginTop = '100px';
+
+      expect(instance.getElementDistanceFromDocumentTop()).toEqual(520);
+
+      instance.container.ownerDocument.body.style.marginTop = null;
+      instance.container.ownerDocument.body.style.borderTop = null;
+      instance.container.ownerDocument.body.style.paddingTop = null;
+      instance.container.style.marginTop = null;
+      instance.container.style.paddingTop = null;
+      instance.element.style.marginTop = null;
     });
 
-    describe("if the page is scrolled", function() {
-      it("returns total offsetTop", function() {
-        var instance = PositionStickyFactory.create();
+    it("uses placeholder in calculations when the element is not static", function() {
+      var instance = PositionStickyFactory.create();
 
-        instance.latestKnownScrollY = 100;
+      instance.latestKnownScrollY = 0;
+      instance.placeholder.style.marginTop = '123px';
+      instance.makeFixed();
 
-        instance.container.ownerDocument.body.style.marginTop = '100px';
-        instance.container.ownerDocument.body.style.paddingTop = '100px';
-        instance.container.style.marginTop = '100px';
-        instance.container.style.paddingTop = '100px';
-        instance.element.style.marginTop = '100px';
-
-        expect(instance.getElementDistanceFromDocumentTop()).toEqual(500);
-
-        instance.container.ownerDocument.body.style.marginTop = null;
-        instance.container.ownerDocument.body.style.paddingTop = null;
-        instance.container.style.marginTop = null;
-        instance.container.style.paddingTop = null;
-        instance.element.style.marginTop = null;
-      });
-    });
-
-    describe("if the element is not static", function() {
-      it("uses placeholder to calculate distance", function() {
-        var instance = PositionStickyFactory.create();
-
-        instance.latestKnownScrollY = 0;
-        instance.placeholder.style.marginTop = '123px';
-        instance.makeFixed();
-
-        expect(instance.getElementDistanceFromDocumentTop()).toEqual(123);
-      });
+      expect(instance.getElementDistanceFromDocumentTop()).toEqual(123);
     });
 
   });
