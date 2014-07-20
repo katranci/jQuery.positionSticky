@@ -1,7 +1,7 @@
 {
-  "name": "vanilla-position-sticky",
+  "name": "jQuery.positionSticky",
   "version": "1.0.0",
-  "description": "Sticky positioning polyfill with zero framework dependency",
+  "description": "Sticky positioning polyfill for jQuery",
   "author": "Ahmet Katrancı <ahmet@katranci.co.uk>",
   "license": "MIT",
   "devDependencies": {
@@ -15,7 +15,8 @@
     "gulp-rename": "~1.2.0",
     "gulp-jshint": "~1.7.1",
     "jshint-stylish": "~0.4.0",
-    "gulp-jsdoc": "~0.1.4"
+    "gulp-jsdoc": "~0.1.4",
+    "gulp-wrap": "~0.3.0"
   },
   "private": true
 }

@@ -4,24 +4,34 @@ var gulp    = require('gulp'),
     jshint  = require('gulp-jshint'),
     stylish = require('jshint-stylish'),
     jsdoc   = require('gulp-jsdoc'),
-    rename  = require('gulp-rename');
+    rename  = require('gulp-rename'),
+    wrap    = require('gulp-wrap');
 
 
-gulp.task('default', function() {
-  gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
+gulp.task('default', ['build', 'jsdoc']);
+
+
+gulp.task('build', function() {
+  return gulp.src(['./src/rAF.js', './src/PositionSticky.js', './src/jQueryPluginDefinition.js'])
       .pipe(jshint())
       .pipe(jshint.reporter(stylish))
-      .pipe(jsdoc('./docs'))
-      .pipe(concat('PositionSticky.js'))
+      .pipe(concat('jQuery.positionSticky.js'))
+      .pipe(wrap('(function($, window, undefined) {\n\n<%= contents %>\n\n})(jQuery, window);'))
       .pipe(gulp.dest('dist'))
       .pipe(uglify())
-      .pipe(rename('PositionSticky.min.js'))
+      .pipe(rename('jQuery.positionSticky.min.js'))
       .pipe(gulp.dest('dist'));
 });
 
 
+gulp.task('jsdoc', function() {
+  return gulp.src('./src/PositionSticky.js')
+      .pipe(jsdoc('./docs'))
+});
+
+
 gulp.task('lint', function() {
-  gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
+  return gulp.src(['./src/rAF.js', './src/PositionSticky.js', './src/jQueryPluginDefinition.js'])
       .pipe(jshint())
       .pipe(jshint.reporter(stylish));
 });
