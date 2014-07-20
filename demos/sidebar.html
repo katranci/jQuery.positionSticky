@@ -30,10 +30,10 @@
     </div>
   </div>
 
-  <script src="../dist/PositionSticky.js"></script>
+  <script src="../lib/jquery/dist/jquery.js"></script>
+  <script src="../dist/jQuery.positionSticky.js"></script>
   <script>
-    var element = document.querySelector('.sticky');
-    var positionSticky = PositionSticky.create(element, {offsetTop: 20});
+    jQuery('.sticky').positionSticky({offsetTop: 20});
   </script>
 
 </body>

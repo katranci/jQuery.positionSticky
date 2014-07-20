@@ -1,16 +1,19 @@
 {
-  "name": "vanilla-position-sticky",
+  "name": "jQuery.positionSticky",
   "version": "1.0.0",
   "authors": [
     "Ahmet Katrancı <ahmet@katranci.co.uk>"
   ],
-  "description": "Sticky positioning polyfill with zero framework dependency",
+  "description": "Sticky positioning polyfill for jQuery",
   "main": "dist/PositionSticky.js",
   "ignore": [
     "*", "!demos/*", "!dist/*", "!docs/*"
   ],
   "keywords": [
-    "position", "sticky", "polyfill", "vanilla"
+    "position", "sticky", "polyfill", "jquery"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "*"
+  }
 }

@@ -1,5 +1,5 @@
-vanilla-position-sticky
-=======================
+jQuery.positionSticky
+=====================
 
 Usage
 -----
@@ -23,13 +23,17 @@ Usage
 ```
 
 ```
-var element = document.getElementById('sticky');
-var sticky  = PositionSticky.create(element);  
+$('#sticky').positionSticky();  
 ```
 
 Examples
 --------
 Please check `demos` folder
+
+
+Supported jQuery versions
+-------------------------
+Any
 
 
 Browser Support
