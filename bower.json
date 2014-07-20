@@ -5,7 +5,7 @@
     "Ahmet Katrancı <ahmet@katranci.co.uk>"
   ],
   "description": "Sticky positioning polyfill for jQuery",
-  "main": "dist/PositionSticky.js",
+  "main": "dist/jQuery.positionSticky.js",
   "ignore": [
     "*", "!demos/*", "!dist/*", "!docs/*"
   ],
