@@ -22,7 +22,7 @@ Usage
 
 ```
 
-```
+```javascript
 var element = document.getElementById('sticky');
 var sticky  = PositionSticky.create(element);  
 ```
