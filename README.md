@@ -28,7 +28,10 @@ $('#sticky').positionSticky();
 
 Examples
 --------
-Please check `demos` folder
+* [Simple usage](http://katranci.github.io/jQuery.positionSticky/demos/demo1.html)
+* [Support for display and float properties](http://katranci.github.io/jQuery.positionSticky/demos/demo2.html)
+* [Refresh functionality](http://katranci.github.io/jQuery.positionSticky/demos/refresh.html)
+* [A sidebar example](http://katranci.github.io/jQuery.positionSticky/demos/sidebar.html)
 
 
 Supported jQuery versions
