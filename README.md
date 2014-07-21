@@ -1,6 +1,6 @@
 jQuery.positionSticky
 =====================
-[![Code Climate](https://codeclimate.com/github/katranci/vanilla-position-sticky.png)](https://codeclimate.com/github/katranci/vanilla-position-sticky)
+[![Code Climate](https://codeclimate.com/github/katranci/jQuery.positionSticky.png)](https://codeclimate.com/github/katranci/jQuery.positionSticky)
 
 Usage
 -----
