@@ -22,7 +22,7 @@ Usage
 
 ```
 
-```
+```javascript
 $('#sticky').positionSticky();  
 ```
 
