@@ -4,13 +4,18 @@ var gulp    = require('gulp'),
     jshint  = require('gulp-jshint'),
     stylish = require('jshint-stylish'),
     jsdoc   = require('gulp-jsdoc'),
+    karma   = require('gulp-karma'),
     rename  = require('gulp-rename');
 
 
-gulp.task('default', function() {
+var testFiles = [
+  'src/PositionSticky.js',
+  'test/*.js'
+];
+
+
+gulp.task('default', ['test', 'lint'], function() {
   gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
-      .pipe(jshint())
-      .pipe(jshint.reporter(stylish))
       .pipe(jsdoc('./docs'))
       .pipe(concat('PositionSticky.js'))
       .pipe(gulp.dest('dist'))
@@ -20,8 +25,21 @@ gulp.task('default', function() {
 });
 
 
+gulp.task('test', function() {
+  return gulp.src(testFiles)
+      .pipe(karma({
+        configFile: 'karma.conf.js',
+        action: 'run'
+      }))
+      .on('error', function(err) {
+        // Make sure failed tests cause gulp to exit non-zero
+        throw err;
+      });
+});
+
+
 gulp.task('lint', function() {
-  gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
+  return gulp.src(['./src/rAF.js', './src/PositionSticky.js'])
       .pipe(jshint())
       .pipe(jshint.reporter(stylish));
 });
