@@ -4,6 +4,9 @@
   "description": "Sticky positioning polyfill for jQuery",
   "author": "Ahmet Katrancı <ahmet@katranci.co.uk>",
   "license": "MIT",
+  "scripts": {
+    "test": "gulp test"
+  },
   "devDependencies": {
     "karma": "~0.12.16",
     "karma-jasmine": "~0.2.0",
@@ -16,7 +19,8 @@
     "gulp-jshint": "~1.7.1",
     "jshint-stylish": "~0.4.0",
     "gulp-jsdoc": "~0.1.4",
-    "gulp-wrap": "~0.3.0"
+    "gulp-wrap": "~0.3.0",
+    "gulp-karma": "0.0.4"
   },
   "private": true
 }
