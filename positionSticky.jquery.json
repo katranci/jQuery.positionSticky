@@ -1,7 +1,7 @@
 {
   "name": "positionSticky",
   "title": "jQuery.positionSticky",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": {
     "name": "Ahmet Katrancı <ahmet@katranci.co.uk>"
   },
@@ -21,6 +21,6 @@
   ],
   "dependencies": {
     "jquery": "*",
-    "PositionSticky": "1.0.1"
+    "PositionSticky": "1.1.0"
   }
 }

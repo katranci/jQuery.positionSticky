@@ -1,6 +1,6 @@
 {
   "name": "jQuery.positionSticky",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "authors": [
     "Ahmet Katrancı <ahmet@katranci.co.uk>"
   ],
@@ -9,8 +9,7 @@
   "ignore": [
     "*",
     "!demos/*",
-    "!dist/*",
-    "!docs/*"
+    "!dist/*"
   ],
   "keywords": [
     "position",
@@ -21,6 +20,6 @@
   "license": "MIT",
   "dependencies": {
     "jquery": "*",
-    "PositionSticky": "1.0.1"
+    "PositionSticky": "1.1.0"
   }
 }
