@@ -1,0 +1,16 @@
+{
+  "name": "PositionSticky",
+  "version": "1.1.0",
+  "authors": [
+    "Ahmet Katrancı <ahmet@katranci.co.uk>"
+  ],
+  "description": "Sticky positioning polyfill with zero framework dependency",
+  "main": "dist/PositionSticky.js",
+  "ignore": [
+    "*", "!demos/*", "!dist/*", "!docs/*"
+  ],
+  "keywords": [
+    "position", "sticky", "polyfill", "vanilla"
+  ],
+  "license": "MIT"
+}

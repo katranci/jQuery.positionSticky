@@ -1,0 +1,27 @@
+body, h2 { margin: 0; }
+
+body {
+  padding: 0 20% 1000px;
+  background: #FFFFFF;
+  font: 1.2rem sans-serif;
+}
+
+.content {
+  margin: 50px 0;
+  padding: 20px;
+  background: #D9E8F5;
+  border: 10px solid #304269;
+}
+
+.sticky {
+  padding: 10px;
+  border: 10px solid rgba(0,0,0,0.3);
+  background: #304269;
+  color: #FFFFFF;
+}
+
+.float--left  { float: left;  margin-right: 15px; }
+.float--right { float: right; margin-left: 15px;  }
+
+.float--left  + p,
+.float--right + p { margin-top: 0; }
