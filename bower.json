@@ -7,13 +7,20 @@
   "description": "Sticky positioning polyfill for jQuery",
   "main": "dist/jQuery.positionSticky.js",
   "ignore": [
-    "*", "!demos/*", "!dist/*", "!docs/*"
+    "*",
+    "!demos/*",
+    "!dist/*",
+    "!docs/*"
   ],
   "keywords": [
-    "position", "sticky", "polyfill", "jquery"
+    "position",
+    "sticky",
+    "polyfill",
+    "jquery"
   ],
   "license": "MIT",
   "dependencies": {
-    "jquery": "*"
+    "jquery": "*",
+    "PositionSticky": "1.0.1"
   }
 }
