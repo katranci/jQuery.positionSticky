@@ -1,16 +1,22 @@
-$.fn.positionSticky = function(options) {
+;(function($, PositionSticky) {
 
-  return this.each(function() {
-    var $this = $(this);
-    var data  = $this.data('positionSticky');
+  'use strict';
 
-    if (!data) {
-      $this.data('positionSticky', (data = PositionSticky.create(this, options)));
-    }
+  $.fn.positionSticky = function(options) {
 
-    if (typeof options === 'string') {
-      data[options]();
-    }
-  });
+    return this.each(function() {
+      var $this = $(this);
+      var data  = $this.data('positionSticky');
 
-};
+      if (!data) {
+        $this.data('positionSticky', (data = PositionSticky.create(this, options)));
+      }
+
+      if (typeof options === 'string') {
+        data[options]();
+      }
+    });
+
+  };
+
+})(jQuery, PositionSticky);

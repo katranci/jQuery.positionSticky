@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PositionSticky Demo Refresh</title>
+  <title>PositionSticky Demo | Refresh</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    body, h2 {margin: 0;}
-    body {padding: 0 20% 1000px; background: #FFFFFF; font: 1.2rem sans-serif;}
-    .content {margin: 50px 0; padding: 20px; background: #D9E8F5;}
-    .sticky {padding: 10px; border: 10px solid rgba(0,0,0,0.3); background: #304269; color: #FFFFFF;}
-    #controls {position: fixed; top: 50px; left: 20px;}
+    #controls { position: fixed; top: 50px; left: 20px; }
   </style>
   <script>
     function getRandomInt(min, max) {
@@ -19,11 +16,10 @@
 <body>
 
   <div id="controls">
-    <button onclick="$element.height(getRandomInt(50,200)+'px')">Change Sticky Height</button>
-    <br />
-    <button onclick="document.body.style.paddingTop=getRandomInt(50,200)+'px'">Change Layout</button>
+    <button onclick="document.querySelector('.sticky').style.height=getRandomInt(50,200)+'px'">Change Sticky Height</button><br />
+    <button onclick="document.body.style.paddingTop=getRandomInt(50,200)+'px';">Change Offsets</button>
     <br /><br />
-    <button onclick="$element.positionSticky('refresh')">Refresh</button>
+    <button onclick="$sticky.positionSticky('refresh')">Invoke #refresh</button>
   </div>
 
   <div class="content">
@@ -33,11 +29,11 @@
     <p>In ut turpis nulla. Morbi ut ante erat. Donec pharetra, lorem at vehicula gravida, dui tellus luctus risus, vel pharetra libero tortor ut orci. Nullam pulvinar magna dapibus malesuada laoreet. Etiam placerat interdum pharetra. Suspendisse potenti. Donec consectetur ligula eu turpis pretium tempus. Duis in rhoncus nisi. Phasellus porta mauris at leo pulvinar, sed congue tortor mollis. Nullam porttitor gravida lorem fermentum tincidunt. Etiam auctor bibendum risus, vitae mattis lorem imperdiet nec. Mauris non posuere enim, et dictum nibh. Aenean ac purus sodales, interdum augue sed, dignissim nisl.</p>
   </div>
 
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="lib/jquery/dist/jquery.js"></script>
+  <script src="lib/PositionSticky/dist/PositionSticky.js"></script>
   <script src="../dist/jQuery.positionSticky.js"></script>
   <script>
-    var $element = jQuery('.sticky');
-    $element.positionSticky();
+    var $sticky = jQuery('.sticky').positionSticky();
   </script>
 
 </body>

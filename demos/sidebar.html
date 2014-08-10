@@ -2,17 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PositionSticky Demo Sidebar</title>
+  <title>PositionSticky Demo | Sidebar</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    body, h2 {margin: 0;}
-    body {padding: 0 20% 1000px; background: #FFFFFF; font: 1.2rem sans-serif;}
-
     #main {box-sizing: border-box; display: table; width: 100%; margin: 50px 0; padding: 20px; background: #D9E8F5;}
     #body {display: table-cell; vertical-align: top; padding-right: 20px;}
     #body p:first-child {margin-top: 0;}
-    #sidebar {display: table-cell; width: 30%;}
-
-    .sticky {padding: 10px; border: 10px solid rgba(0,0,0,0.3); background: #304269; color: #FFFFFF;}
+    #sidebar {display: table-cell; width: 30%; background: #FFF;}
   </style>
 </head>
 <body>
@@ -30,7 +26,8 @@
     </div>
   </div>
 
-  <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="lib/jquery/dist/jquery.js"></script>
+  <script src="lib/PositionSticky/dist/PositionSticky.js"></script>
   <script src="../dist/jQuery.positionSticky.js"></script>
   <script>
     jQuery('.sticky').positionSticky({offsetTop: 20});
