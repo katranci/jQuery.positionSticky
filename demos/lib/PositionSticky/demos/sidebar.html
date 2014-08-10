@@ -26,11 +26,9 @@
     </div>
   </div>
 
-  <script src="lib/jquery/dist/jquery.js"></script>
-  <script src="lib/PositionSticky/dist/PositionSticky.js"></script>
-  <script src="../dist/jQuery.positionSticky.js"></script>
+  <script src="../dist/PositionSticky.js"></script>
   <script>
-    jQuery('.sticky').positionSticky({offsetTop: 20});
+    var sticky = PositionSticky.create(document.querySelector('.sticky'), {offsetTop: 20});
   </script>
 
 </body>
