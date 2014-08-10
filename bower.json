@@ -8,8 +8,8 @@
   "main": "dist/jQuery.positionSticky.js",
   "ignore": [
     "*",
-    "!demos/*",
-    "!dist/*"
+    "!demos/**/*",
+    "!dist/**/*"
   ],
   "keywords": [
     "position",
